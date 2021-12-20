@@ -16,15 +16,15 @@ void flip(ii &a, int r, int t, int axis) { // 0: flip along x-axis, 1: flip alon
     }
 }
 
-int binary_search(vi is, int y) {
-    int lo = 0, hi=is.size();
-    while (lo < hi) {
-        int mid = lo + (hi-lo) / 2;
-        if (is[mid] <= y) lo = mid + 1;
-        else hi = mid;
-    }
-    return lo;
-}
+// int binary_search(vi is, int y) {
+//     int lo = 0, hi=is.size();
+//     while (lo < hi) {
+//         int mid = lo + (hi-lo) / 2;
+//         if (is[mid] <= y) lo = mid + 1;
+//         else hi = mid;
+//     }
+//     return lo;
+// }
 
 int lis(vii errands, ii s, ii t, int n) {
     vi is;
@@ -36,7 +36,8 @@ int lis(vii errands, ii s, ii t, int n) {
         if (x < s.first || y < s.second || y > t.second) continue;
         if (x > t.first) break;
         
-        int idx = binary_search(is, y);
+        auto it = upper_bound(is.begin(), is.end(), y);
+        int idx = it - is.begin();
         if (idx == is.size()) {
             is.push_back(y);
         } else {
