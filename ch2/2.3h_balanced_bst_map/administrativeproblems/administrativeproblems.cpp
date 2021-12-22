@@ -5,13 +5,11 @@
 using namespace std;
 
 // TODO: this solution is not fully correct yet.
-
 struct car {
-    ll price;
-    ll pickupcost;
-    ll costperkm;
+    int price;
+    int pickupcost;
+    int costperkm;
 };
-
 struct event {
     char type; // type of event
     string c; // name of type of car
@@ -24,14 +22,12 @@ int main() {
         unordered_map<string, car> cars;
         for (int i=0;i<n;i++) {
             string N; cin>>N;
-            ll p,q,k; cin>>p>>q>>k;
+            int p,q,k; cin>>p>>q>>k;
             cars[N] = {p,q,k};
         }
-
-        map<string, ll> costs;
+        map<string, int> costs;
         unordered_map<string, event> events;
         unordered_set<string> inconsistent;
-
         for (int i=0;i<m;i++) {
             int t; string S; char e; cin>>t>>S>>e;
             if (costs.find(S) == costs.end()) costs[S] = 0;
@@ -40,11 +36,12 @@ int main() {
                 if (events.find(S) != events.end() && events[S].type != 'r') {
                     inconsistent.insert(S); continue;
                 }
-                if (costs.find(S) == costs.end()) costs[S] = 0;
                 events[S] = {e, C};
+                // cout << events[S].type << " " << events[S].c << endl;
                 costs[S] += cars[C].pickupcost;
             } else if (e == 'r') {
-                ll d; cin >> d;
+                int d; cin >> d;
+                // if car was never picked up / just returned, inconsistent
                 if (events.find(S) == events.end() || events[S].type == 'r') {
                     inconsistent.insert(S); continue;
                 }
@@ -53,6 +50,7 @@ int main() {
                 costs[S] += cars[p.c].costperkm * d;
             } else if (e == 'a') {
                 double s; cin >> s;
+                // if car was never picked up / just returned, inconsistent
                 if (events.find(S) == events.end() || events[S].type == 'r') {
                     inconsistent.insert(S); continue;
                 }
@@ -61,12 +59,11 @@ int main() {
                 costs[S] += ceil((double) cars[p.c].price * (s/100));
             }
         }
-
         for (auto it=costs.begin(); it!=costs.end(); it++) {
             string spy = (*it).first;
-            ll cost = (*it).second;
+            int cost = (*it).second;
             if (inconsistent.find(spy) == inconsistent.end() && events[spy].type == 'r') {
-                printf("%s %lld\n", spy.c_str(), cost);
+                printf("%s %d\n", spy.c_str(), cost);
             } else {
                 printf("%s INCONSISTENT\n", spy.c_str());
             }
